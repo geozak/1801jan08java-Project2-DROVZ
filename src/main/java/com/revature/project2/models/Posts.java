@@ -1,7 +1,6 @@
 package com.revature.project2.models;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -32,7 +30,7 @@ public class Posts {
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="trainer_id", nullable=false)
-	private Trainer trainer;
+	private Trainer trainer_id;
 	
 	public Posts() {
 		// TODO Auto-generated constructor stub
@@ -42,7 +40,7 @@ public class Posts {
 		super();
 		this.post_desc = post_desc;
 		this.post_added = post_added;
-		this.trainer = trainer;
+		this.trainer_id = trainer;
 	}
 
 	public Posts(int post_id, String post_desc, Timestamp post_added, Trainer trainer) {
@@ -50,7 +48,7 @@ public class Posts {
 		this.post_id = post_id;
 		this.post_desc = post_desc;
 		this.post_added = post_added;
-		this.trainer = trainer;
+		this.trainer_id = trainer;
 	}
 
 	public int getPost_id() {
@@ -78,17 +76,17 @@ public class Posts {
 	}
 
 	public Trainer getTrainer() {
-		return trainer;
+		return trainer_id;
 	}
 
 	public void setTrainer(Trainer trainer) {
-		this.trainer = trainer;
+		this.trainer_id = trainer;
 	}
 
 	@Override
 	public String toString() {
 		return "Posts [post_id=" + post_id + ", post_desc=" + post_desc + ", post_added=" + post_added + ", trainer="
-				+ trainer + "]";
+				+ trainer_id + "]";
 	}
 	
 	
