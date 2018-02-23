@@ -8,5 +8,6 @@ public class Main {
 		HibernateUtil.getSession();
 		
 		HibernateUtil.closeCurrentSession();
+		System.out.println("done");
 	}
 }

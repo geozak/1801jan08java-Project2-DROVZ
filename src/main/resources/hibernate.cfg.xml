@@ -12,13 +12,13 @@
         <property name="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</property>
       
       <!-- Show SQL Output -->
-      <property name="hibernate.show_sql">false</property>
-      <property name="hibernate.format_sql">false</property>
+      <property name="hibernate.show_sql">true</property>
+      <property name="hibernate.format_sql">true</property>
       
       <!-- create		drops all existing tables and adds your schema to the database
            validate		just checks to make sure the database has the defined scheme already in it
            update		it will not delete any part of the schema, will simply add to it. -->
-	  <property name="hibernate.hbm2ddl.auto">create</property>
+	  <property name="hibernate.hbm2ddl.auto">none</property>
 
       <!-- Validate schema (Used when you don't want hibernate to modify your schema) -->
 	  <!--property name="hibernate.hbm2ddl.auto">validate</property>-->
