@@ -17,6 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "post")
 public class Post {
@@ -29,6 +31,7 @@ public class Post {
 	@Column(name = "post_text", nullable = false)
 	private String text;
 
+	@CreationTimestamp
 	@Column(name = "post_added", nullable = false)
 	private Timestamp added;
 
@@ -51,7 +54,7 @@ public class Post {
 	public Post(String text, Trainer creator) {
 		super();
 		this.text = text;
-		this.added = new Timestamp(System.currentTimeMillis());
+//		this.added = new Timestamp(System.currentTimeMillis());
 		this.creator = creator;
 	}
 

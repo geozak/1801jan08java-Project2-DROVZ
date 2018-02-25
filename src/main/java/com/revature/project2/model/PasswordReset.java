@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "reset")
 public class PasswordReset {
@@ -28,6 +30,7 @@ public class PasswordReset {
 	@Column(name = "reset_token", nullable = false)
 	private String token;
 
+	@CreationTimestamp
 	@Column(name = "reset_created", nullable = false)
 	private Timestamp created;
 

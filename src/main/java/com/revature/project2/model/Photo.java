@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "photo")
 public class Photo {
@@ -25,6 +27,7 @@ public class Photo {
 	@Column(name = "photo_url", nullable = false, unique=true)
 	private String url;
 
+	@CreationTimestamp
 	@Column(name = "photo_added", nullable = false)
 	private Timestamp added;
 
@@ -41,7 +44,7 @@ public class Photo {
 	public Photo(String url, Trainer creator) {
 		super();
 		this.url = url;
-		this.added = new Timestamp(System.currentTimeMillis());
+//		this.added = new Timestamp(System.currentTimeMillis());
 		this.creator = creator;
 	}
 
