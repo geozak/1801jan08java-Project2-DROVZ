@@ -17,3 +17,5 @@ target/
 
 # S3 Creds
 src/main/resources/s3.properties
+
+bin/
