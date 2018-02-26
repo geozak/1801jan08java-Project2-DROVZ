@@ -5,11 +5,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,11 +16,11 @@ import com.revature.project2.JSON.TrainerJSON;
 import com.revature.project2.model.Trainer;
 import com.revature.project2.service.AuthService;
 
-@Controller("authController")
+@RestController("authController")
 //@CrossOrigin(origins = "http://localhost:4200")
 @CrossOrigin(origins = "*")
 public class AuthController {
-
+	
 	@Autowired
 	private AuthService authService;
 
