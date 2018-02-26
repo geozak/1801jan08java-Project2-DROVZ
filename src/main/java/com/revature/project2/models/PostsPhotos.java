@@ -30,7 +30,7 @@ public class PostsPhotos {
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="posts_id", nullable=false)
-	private Posts post;
+	private Posts post_id;
 	
 	public PostsPhotos() {
 		// TODO Auto-generated constructor stub
@@ -40,7 +40,7 @@ public class PostsPhotos {
 		super();
 		this.post_photo_url = post_photo_url;
 		this.post_photo_added = post_photo_added;
-		this.post = post;
+		this.post_id = post;
 	}
 
 	public PostsPhotos(int post_photo_id, String post_photo_url, Timestamp post_photo_added, Posts post) {
@@ -48,7 +48,7 @@ public class PostsPhotos {
 		this.post_photo_id = post_photo_id;
 		this.post_photo_url = post_photo_url;
 		this.post_photo_added = post_photo_added;
-		this.post = post;
+		this.post_id = post;
 	}
 
 	public int getPost_photo_id() {
@@ -76,17 +76,17 @@ public class PostsPhotos {
 	}
 
 	public Posts getPost() {
-		return post;
+		return post_id;
 	}
 
 	public void setPost(Posts post) {
-		this.post = post;
+		this.post_id = post;
 	}
 
 	@Override
 	public String toString() {
 		return "PostsPhotos [post_photo_id=" + post_photo_id + ", post_photo_url=" + post_photo_url
-				+ ", post_photo_added=" + post_photo_added + ", post=" + post + "]";
+				+ ", post_photo_added=" + post_photo_added + ", post=" + post_id + "]";
 	}
 	
 	

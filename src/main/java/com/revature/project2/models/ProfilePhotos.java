@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -32,7 +31,7 @@ public class ProfilePhotos {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name="trainer_id", nullable=false)
 	//@Column(name="trainer_id")
-	private Trainer trainer;
+	private Trainer trainer_id;
 	
 	public ProfilePhotos() {
 		// TODO Auto-generated constructor stub
@@ -43,7 +42,7 @@ public class ProfilePhotos {
 		super();
 		this.profile_photo_url = profile_photo_url;
 		this.profile_photo_added = profile_photo_added;
-		this.trainer = trainer;
+		this.trainer_id = trainer;
 	}
 
 	public ProfilePhotos(int profile_photo_id, String profile_photo_url, Timestamp profile_photo_added,
@@ -52,7 +51,7 @@ public class ProfilePhotos {
 		this.profile_photo_id = profile_photo_id;
 		this.profile_photo_url = profile_photo_url;
 		this.profile_photo_added = profile_photo_added;
-		this.trainer = trainer;
+		this.trainer_id = trainer;
 	}
 
 	public int getProfile_photo_id() {
@@ -80,17 +79,17 @@ public class ProfilePhotos {
 	}
 
 	public Trainer getTrainer() {
-		return trainer;
+		return trainer_id;
 	}
 
 	public void setTrainer(Trainer trainer) {
-		this.trainer = trainer;
+		this.trainer_id = trainer;
 	}
 
 	@Override
 	public String toString() {
 		return "ProfilePhotos [profile_photo_id=" + profile_photo_id + ", profile_photo_url=" + profile_photo_url
-				+ ", profile_photo_added=" + profile_photo_added + ", trainer=" + trainer + "]";
+				+ ", profile_photo_added=" + profile_photo_added + ", trainer=" + trainer_id + "]";
 	}
 	
 	

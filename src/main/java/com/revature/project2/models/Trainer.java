@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="TRAINER")
+@Table(name="TRAINERS")
 public class Trainer {
 	
 	@Id
@@ -43,7 +43,7 @@ public class Trainer {
 	private String trainer_email;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	//@Column(name="profile_photo_id")
+	@JoinColumn(name="profile_photo_id")
 	private ProfilePhotos profile_picture_id;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
