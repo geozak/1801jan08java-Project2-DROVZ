@@ -68,21 +68,3 @@ public class AuthController {
 	
 	
 }
-
-// @PostMapping("/registerHero.app")
-// public @ResponseBody ResponseEntity<Message> registerHero(@RequestBody Hero
-// hero){
-// heroService.registerHero(hero);
-// return new ResponseEntity<>(new Message("HERO REGISTERED SUCCESSFULLY."),
-// HttpStatus.OK);
-// }
-//
-// @GetMapping("/getAllHeroes.app")
-// public @ResponseBody ResponseEntity<List<Hero>> getAllHeroes(){
-// return new ResponseEntity<>(heroService.getAllHeroes(), HttpStatus.OK);
-// }
-//
-// @PostMapping("/getHero.app")
-// public @ResponseBody ResponseEntity<Hero> getHero(@RequestBody Hero hero){
-// return new ResponseEntity<>(heroService.findHero(hero), HttpStatus.OK);
-// }
