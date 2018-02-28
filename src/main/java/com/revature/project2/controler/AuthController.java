@@ -25,8 +25,15 @@ public class AuthController {
 	private AuthService authService;
 
 	@PostMapping("/register")
-	public @ResponseBody ResponseEntity<String> register(@RequestBody Trainer trainer) {
-		AuthService.RegisterReturn registerReturn = authService.register(trainer);
+	//firstName: string, lastName: string, email: string, password: string
+	public @ResponseBody ResponseEntity<String> register(
+			@RequestParam("firstName") String firstName, 
+			@RequestParam("lastName") String lastName,
+			@RequestParam("email") String email, 
+			@RequestParam("password") String password) {
+		
+		System.out.println("registering user: " + firstName + " " + lastName);
+		AuthService.RegisterReturn registerReturn = authService.register(new Trainer(null, firstName, lastName, null, password, email));
 
 		String message;
 		// SUCCESS, INPUTSINVALID, EMAILEXISTS, URLEXISTS, OTHERFAILURE
