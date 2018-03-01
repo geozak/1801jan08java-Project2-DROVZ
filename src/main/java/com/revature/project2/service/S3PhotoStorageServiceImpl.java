@@ -1,10 +1,9 @@
 package com.revature.project2.service;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -19,26 +18,25 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 public class S3PhotoStorageServiceImpl implements PhotoStorageService {
 
 	AmazonS3Client s3Client;
+	
+	@Value("${s3.bucket-name}")
 	private String bucketName;
 
-	public S3PhotoStorageServiceImpl() {
-		Properties s3Properties = new Properties();
-
-		try {
-			s3Properties.load(new FileInputStream(getClass().getClassLoader().getResource("s3.properties").getFile()));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	@Autowired
+	public S3PhotoStorageServiceImpl(
+			@Value("${s3.region}") final String region,
+			@Value("${s3.access-key-id}") final String accessKeyId,
+			@Value("${s3.secret-access-key}") final String secretAccessKey) {
+		
+		System.out.println("Connecting to AWS S3");
+//		System.out.println(region);
+//		System.out.println(accessKeyId);
+//		System.out.println(secretAccessKey);
 		
 		s3Client = (AmazonS3Client) AmazonS3ClientBuilder.standard()
-				.withRegion(s3Properties.getProperty("region"))
-				.withCredentials(
-					new AWSStaticCredentialsProvider(
-							new BasicAWSCredentials(
-									s3Properties.getProperty("access-key-id"), 
-									s3Properties.getProperty("secret-access-key")
-				))).build();
-		bucketName = s3Properties.getProperty("bucket-name");
+				.withRegion(region)
+				.withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKeyId, secretAccessKey)))
+				.build();
 	}
 
 	@Override
