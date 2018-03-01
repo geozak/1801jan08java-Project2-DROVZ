@@ -12,6 +12,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 
 @Service("photoStorageService")
 public class S3PhotoStorageServiceImpl implements PhotoStorageService {
@@ -40,10 +41,11 @@ public class S3PhotoStorageServiceImpl implements PhotoStorageService {
 
 	@Override
 	public String storePhoto(File photo, String fileName) {
-		String objectName = System.currentTimeMillis() + fileName;
+		String objectName = System.currentTimeMillis() + photo.getName();
+		System.out.println(objectName);
 		//PutObjectRequest putRequest = new PutObjectRequest(bucketName, objectName, photo).withCannedAcl(CannedAccessControlList.PublicRead);
 		//PutObjectResult response = s3Client.putObject(putRequest);
-		s3Client.putObject(
+		PutObjectResult res = s3Client.putObject(
 				new PutObjectRequest(bucketName, objectName, photo)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
         
