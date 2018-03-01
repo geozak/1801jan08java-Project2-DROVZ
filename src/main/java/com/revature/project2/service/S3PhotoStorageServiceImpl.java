@@ -1,11 +1,19 @@
 package com.revature.project2.service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -13,11 +21,25 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.revature.project2.model.Photo;
+import com.revature.project2.repository.PhotoRepository;
 
 @Service("photoStorageService")
 public class S3PhotoStorageServiceImpl implements PhotoStorageService {
+	
+	public class PhotoStorageResponse{
+		public final boolean success;
+		public final String message;
+		public PhotoStorageResponse(boolean success, String message) {
+			super();
+			this.success = success;
+			this.message = message;
+		}
+		
+	}
 
 	AmazonS3Client s3Client;
+	PhotoRepository photoRepo;
 	
 	@Value("${s3.bucket-name}")
 	private String bucketName;
@@ -40,19 +62,56 @@ public class S3PhotoStorageServiceImpl implements PhotoStorageService {
 	}
 
 	@Override
-	public String storePhoto(File photo, String fileName) {
-		String objectName = System.currentTimeMillis() + photo.getName();
-		System.out.println(objectName);
+	public PhotoStorageResponse storePhoto(MultipartFile file, Photo photo) {
+		
 		//PutObjectRequest putRequest = new PutObjectRequest(bucketName, objectName, photo).withCannedAcl(CannedAccessControlList.PublicRead);
 		//PutObjectResult response = s3Client.putObject(putRequest);
-		PutObjectResult res = s3Client.putObject(
-				new PutObjectRequest(bucketName, objectName, photo)
-				.withCannedAcl(CannedAccessControlList.PublicRead));
+		File newFile = new File(System.currentTimeMillis() + file.getOriginalFilename());
+		try {
+			try(FileOutputStream fos = new FileOutputStream(newFile)) {
+				fos.write(file.getBytes());
+				//file.transferTo(newFile); // why this doesnt work... i dont know
+			}  catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+				return new PhotoStorageResponse(false, "FAIL to upload file!");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				return new PhotoStorageResponse(false, "FAIL to upload file!");
+			}
+			try {
+				s3Client.putObject(
+						new PutObjectRequest(bucketName, newFile.getName(), newFile)
+						.withCannedAcl(CannedAccessControlList.PublicRead));
+		        
+		        String url = s3Client.getResourceUrl(bucketName, newFile.getName());
+		        System.out.println("Uploaded object url: " + url);
+		        photo.setUrl(url);
+		        photoRepo.save(photo);
+		        return new PhotoStorageResponse(true, url);
+			} catch (AmazonServiceException e) {
+				e.printStackTrace();
+				return new PhotoStorageResponse(false, "FAIL to upload bc of amazon!");
+			}catch (SdkClientException e) {
+				e.printStackTrace();
+				return new PhotoStorageResponse(false, "FAIL to upload file!");
+			}
+		} finally {
+			newFile.delete();
+		}
+		
+		
         
-        String url = s3Client.getResourceUrl(bucketName, objectName);
-        System.out.println("Uploaded object url: " + url);
-        
-        return url;
+	}
+	
+	@Override
+	public void deleteFile(String url) {
+		try {
+			s3Client.deleteObject(bucketName, url);
+		} catch (AmazonServiceException e) {
+			e.printStackTrace();
+		}catch (SdkClientException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

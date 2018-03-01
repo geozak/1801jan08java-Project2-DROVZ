@@ -64,7 +64,11 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public @ResponseBody ResponseEntity<TrainerJSON> login(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession httpSession) {
+	public @ResponseBody ResponseEntity<TrainerJSON> login(
+			@RequestParam("email") String email, 
+			@RequestParam("password") String password, 
+			HttpSession httpSession) {
+		System.out.println("Login Session ID: " + httpSession.getId());
 		httpSession.removeAttribute("trainer");
 		
 		Trainer trainer = authService.login(email, password);

@@ -1,6 +1,9 @@
 package com.revature.project2.controler;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -9,6 +12,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -27,7 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import com.revature.project2.model.Trainer;
+import com.revature.project2.repository.TrainerRepository;
 import com.revature.project2.service.PhotoStorageService;
+import com.revature.project2.service.S3PhotoStorageServiceImpl.PhotoStorageResponse;
 
 
 @RestController("photoController")
@@ -37,28 +45,45 @@ public class PhotoController {
 	
 	@Autowired
 	PhotoStorageService storageService;
+	
+	@Autowired
+	TrainerRepository repo;
+	
 
 	List<String> files = new ArrayList<String>();
 
 	@PostMapping("/postPhoto.app")
-	public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
-		String message = "";
-		try {
-			
-			//storageService.storeFile(file);
-			files.add(file.getOriginalFilename());
+	public ResponseEntity<String> handleFileUpload(
+			@RequestParam("file") MultipartFile file, 
+			HttpSession httpSession) {
 
-			message = "You successfully uploaded " + file.getOriginalFilename() + "!";
-			File newFile = new File(file.getOriginalFilename());
-			file.transferTo(newFile);
-			String url = storageService.storePhoto(newFile, file.getOriginalFilename());
-			System.out.println(url);
-			
-			return ResponseEntity.status(HttpStatus.OK).body(message);
-		} catch (Exception e) {
-			message = "FAIL to upload " + file.getOriginalFilename() + "!";
-			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+		System.out.println("Photo Upload Session ID: " + httpSession.getId());
+		
+		Object to = httpSession.getAttribute("trainer");
+		if(to == null) {
+			System.out.println("not logged in");
 		}
+		else if (to instanceof Trainer ) {
+			Trainer tt = (Trainer) to;
+			System.out.println(tt);
+			
+		}
+		else {
+			System.out.println("user object not of type trainer");
+		}
+		
+		PhotoStorageResponse temp = storageService.storePhoto(file);
+		if(temp.success) {
+			// if user or post already has a photo
+			// delete photo from s3
+			// store the temp.body in the photo
+			
+			// update the photo on the profile or post
+			//storageService.deleteFile(temp.message);
+			return ResponseEntity.ok(temp.message);
+		}
+
+		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(temp.message);
 	}
 
 	@GetMapping("/getallfiles")
@@ -69,91 +94,5 @@ public class PhotoController {
 				.collect(Collectors.toList());
 
 		return ResponseEntity.ok().body(fileNames);
-	}
-
-	@GetMapping("/files/{filename:.+}")
-	@ResponseBody
-	public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-		Resource file = new Resource() {
-			
-			@Override
-			public InputStream getInputStream() throws IOException {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public long lastModified() throws IOException {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public boolean isReadable() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			@Override
-			public boolean isOpen() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			@Override
-			public URL getURL() throws IOException {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public URI getURI() throws IOException {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public String getFilename() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public File getFile() throws IOException {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public String getDescription() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public boolean exists() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			@Override
-			public Resource createRelative(String relativePath) throws IOException {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public long contentLength() throws IOException {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-		}; //storageService.loadFile(filename);
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-				.body(file);
-	}
-	@PostMapping("/getPoke.app")
-	public @ResponseBody ResponseEntity<Boolean> getPoke(@RequestBody int id){
-		return ResponseEntity.ok().body(true);
 	}
 }
