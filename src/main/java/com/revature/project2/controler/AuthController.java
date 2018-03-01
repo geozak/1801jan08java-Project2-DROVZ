@@ -1,6 +1,7 @@
 package com.revature.project2.controler;
 
 import javax.servlet.http.HttpSession;
+import javax.swing.plaf.synth.SynthSeparatorUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.project2.JSON.MessageJSON;
 import com.revature.project2.JSON.TrainerJSON;
 import com.revature.project2.model.Trainer;
 import com.revature.project2.service.AuthService;
@@ -26,13 +28,15 @@ public class AuthController {
 
 	@PostMapping("/register")
 	//firstName: string, lastName: string, email: string, password: string
-	public @ResponseBody ResponseEntity<String> register(
+	public @ResponseBody ResponseEntity<MessageJSON> register(
 			@RequestParam("firstName") String firstName, 
 			@RequestParam("lastName") String lastName,
 			@RequestParam("email") String email, 
 			@RequestParam("password") String password) {
 		
 		System.out.println("registering user: " + firstName + " " + lastName);
+		System.out.println("email: " + email);
+		System.out.println("Password: " + password);
 		AuthService.RegisterReturn registerReturn = authService.register(new Trainer(null, firstName, lastName, null, password, email));
 
 		String message;
@@ -55,8 +59,8 @@ public class AuthController {
 			message = "other";
 			break;
 		}
-
-		return new ResponseEntity<String>(message, HttpStatus.OK);
+		System.out.println("Status: " + message);
+		return new ResponseEntity<MessageJSON>(new MessageJSON(message), HttpStatus.OK);
 	}
 
 	@PostMapping("/login")
@@ -70,7 +74,7 @@ public class AuthController {
 		}
 		
 		httpSession.setAttribute("trainer", trainer);
-		return new ResponseEntity<TrainerJSON>(new TrainerJSON(trainer), HttpStatus.OK);
+		return new ResponseEntity<TrainerJSON>(new TrainerJSON(trainer, true), HttpStatus.OK);
 	}
 	
 	
