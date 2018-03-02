@@ -39,6 +39,7 @@ public class S3PhotoStorageServiceImpl implements PhotoStorageService {
 	}
 
 	AmazonS3Client s3Client;
+	@Autowired
 	PhotoRepository photoRepo;
 	
 	@Value("${s3.bucket-name}")
@@ -85,6 +86,7 @@ public class S3PhotoStorageServiceImpl implements PhotoStorageService {
 		        
 		        String url = s3Client.getResourceUrl(bucketName, newFile.getName());
 		        System.out.println("Uploaded object url: " + url);
+		        
 		        photo.setUrl(url);
 		        photoRepo.save(photo);
 		        return new PhotoStorageResponse(true, url);
