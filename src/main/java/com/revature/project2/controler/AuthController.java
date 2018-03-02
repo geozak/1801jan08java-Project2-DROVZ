@@ -85,6 +85,7 @@ public class AuthController {
 		}
 		
 //		httpSession.setAttribute("trainer", trainer);
+		sessionVariables.setTrainer(trainer);
 		return new ResponseEntity<TrainerJSON>(new TrainerJSON(trainer, true), HttpStatus.OK);
 	}
 	
