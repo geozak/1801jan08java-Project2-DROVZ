@@ -28,8 +28,13 @@ public class AuthServiceImpl implements AuthService {
 		System.out.println("attempting to login");
 		System.out.println("email: " + email);
 		System.out.println("password: " + password);
+		
 		Trainer trainer = trainerRepository.findByEmail(email);
-		if (trainer != null && trainer.getPassword().equals(PasswordHashing.hashPassword(trainer.getSalt(), password))) {
+		System.out.println("Found: " + trainer);
+		if (
+			trainer != null &&
+			trainer.getPassword().equals(
+				PasswordHashing.hashPassword(trainer.getSalt(), password))) {
 			return trainer;
 		}
 		return null;

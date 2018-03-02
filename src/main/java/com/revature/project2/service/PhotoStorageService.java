@@ -1,16 +1,40 @@
 package com.revature.project2.service;
 
-import java.io.File;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.revature.project2.model.Photo;
-import com.revature.project2.service.S3PhotoStorageServiceImpl.PhotoStorageResponse;
+import com.revature.project2.model.Trainer;
 
 public interface PhotoStorageService {
 
-	void deleteFile(String url);
+	public class PhotoStorageResponse {
+		private final boolean success;
+		private final String message;
+		private final Photo photo;
 
-	PhotoStorageResponse storePhoto(MultipartFile file, Photo photo);
+		public PhotoStorageResponse(boolean success, String message, Photo photo) {
+			this.success = success;
+			this.message = message;
+			this.photo = photo;
+		}
+
+		public boolean isSuccess() {
+			return success;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+
+		public Photo getPhoto() {
+			return photo;
+		}
+
+	}
+
+//	void deleteFile(String url);
+
+	PhotoStorageResponse storePhoto(MultipartFile file, Trainer creator);
+
 }

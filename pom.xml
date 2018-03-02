@@ -24,20 +24,6 @@
 		<java.version>1.8</java.version>
 	</properties>
 	
-	<!--
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.amazonaws</groupId>
-				<artifactId>aws-java-sdk-bom</artifactId>
-				<version>1.11.210</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-	-->
-	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -78,6 +64,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>Project2PokeLife</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
