@@ -61,7 +61,7 @@ public class PhotoController {
 
 	List<String> files = new ArrayList<String>();
 
-	@PostMapping("/postPhoto.app")
+	@PostMapping("/postPhoto")
 	public ResponseEntity<String> handleFileUpload(
 			@RequestParam("file") MultipartFile file) {
 
