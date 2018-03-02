@@ -54,8 +54,9 @@ public class PhotoController {
 
 	@PostMapping("/postPhoto.app")
 	public ResponseEntity<String> handleFileUpload(
-			@RequestParam("file") MultipartFile file, 
-			HttpSession httpSession) {
+			@RequestParam("file") MultipartFile file
+			, @RequestParam("trainer") Trainer trainer
+			, HttpSession httpSession) {
 
 		System.out.println("Photo Upload Session ID: " + httpSession.getId());
 		
@@ -72,7 +73,7 @@ public class PhotoController {
 			System.out.println("user object not of type trainer");
 		}
 		
-		PhotoStorageResponse temp = storageService.storePhoto(file);
+		PhotoStorageResponse temp = storageService.storePhoto(file, trainer.getProfilePicture());
 		if(temp.success) {
 			// if user or post already has a photo
 			// delete photo from s3
