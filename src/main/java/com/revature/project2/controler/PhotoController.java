@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.boot.TempTableDdlTransactionHandling;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import com.revature.project2.model.Photo;
 import com.revature.project2.model.Trainer;
 import com.revature.project2.repository.TrainerRepository;
 import com.revature.project2.service.PhotoStorageService;
@@ -55,10 +57,8 @@ public class PhotoController {
 	@PostMapping("/postPhoto.app")
 	public ResponseEntity<String> handleFileUpload(
 			@RequestParam("file") MultipartFile file
-			, @RequestParam("trainer") Trainer trainer
+			, @RequestParam("trainerId") int id
 			, HttpSession httpSession) {
-
-		System.out.println("Photo Upload Session ID: " + httpSession.getId());
 		
 		Object to = httpSession.getAttribute("trainer");
 		if(to == null) {
@@ -72,15 +72,27 @@ public class PhotoController {
 		else {
 			System.out.println("user object not of type trainer");
 		}
-		
-		PhotoStorageResponse temp = storageService.storePhoto(file, trainer.getProfilePicture());
+		PhotoStorageResponse temp = null;
+		Trainer tempT = null;
+		try {
+			tempT = repo.findOne(id);
+			if(tempT.getProfilePicture() == null) {
+	        	tempT.setProfilePicture(new Photo(tempT));
+	        }
+			temp = storageService.storePhoto(file, tempT.getProfilePicture());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("no user");
+		}
 		if(temp.success) {
+			System.out.println(true);
 			// if user or post already has a photo
 			// delete photo from s3
 			// store the temp.body in the photo
 			
 			// update the photo on the profile or post
 			//storageService.deleteFile(temp.message);
+			repo.save(tempT);
 			return ResponseEntity.ok(temp.message);
 		}
 

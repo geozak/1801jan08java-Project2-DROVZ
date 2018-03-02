@@ -39,7 +39,10 @@ public class Photo {
 		super();
 	}
 	
-	
+	public Photo(Trainer creator) {
+		this.creator = creator;
+		this.added = new Timestamp(System.currentTimeMillis());
+	}
 
 	public Photo(String url, Trainer creator) {
 		super();
