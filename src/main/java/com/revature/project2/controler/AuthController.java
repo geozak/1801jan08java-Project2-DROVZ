@@ -81,5 +81,4 @@ public class AuthController {
 		return new ResponseEntity<TrainerJSON>(new TrainerJSON(trainer, true), HttpStatus.OK);
 	}
 	
-	
 }
