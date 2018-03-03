@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import com.revature.project2.JSON.MessageJSON;
 import com.revature.project2.model.Trainer;
 import com.revature.project2.repository.TrainerRepository;
 import com.revature.project2.service.PhotoStorageService;
@@ -60,13 +61,15 @@ public class PhotoController {
 	List<String> files = new ArrayList<String>();
 
 	@PostMapping("/postPhoto.app")
-	public ResponseEntity<String> handleFileUpload(
+	public ResponseEntity<MessageJSON> handleFileUpload(
 			@RequestParam("file") MultipartFile file) {
 
 		Trainer trainer = sessionVariables.getTrainer();
 		if(trainer == null) {
 			System.out.println("FAIL to upload not logged in");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FAIL to upload not logged in");
+			return new ResponseEntity<MessageJSON>(
+					new MessageJSON("FAIL to upload not logged in"),
+					HttpStatus.UNAUTHORIZED);
 		}
 		
 		
@@ -74,10 +77,14 @@ public class PhotoController {
 		if(photoStorageResponse.isSuccess()) {
 			trainer.setProfilePicture(photoStorageResponse.getPhoto());
 			repo.save(trainer);
-			return ResponseEntity.ok(photoStorageResponse.getMessage());
+			return new ResponseEntity<MessageJSON>(
+					new MessageJSON(photoStorageResponse.getMessage()),
+					HttpStatus.OK);
 		}
 
-		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(photoStorageResponse.getMessage());
+		return new ResponseEntity<MessageJSON>(
+				new MessageJSON(photoStorageResponse.getMessage()),
+				HttpStatus.EXPECTATION_FAILED);
 	}
 
 	@GetMapping("/getallfiles")

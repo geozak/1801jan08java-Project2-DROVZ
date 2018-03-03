@@ -24,7 +24,7 @@ public class SessionVariables {
 	}
 
 	public Trainer getTrainer() {
-		return trainerRepository.findOne(trainerId);
+		return trainerId == null ? null : trainerRepository.findOne(trainerId);
 	}
 
 	public void setTrainer(Trainer trainer) {
