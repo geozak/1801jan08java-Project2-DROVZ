@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.revature.project2.model.Photo;
 import com.revature.project2.model.Trainer;
 import com.revature.project2.repository.TrainerRepository;
 
@@ -26,6 +27,12 @@ public class TrainerServiceImpl implements TrainerService{
 	public Trainer getTrainerByUrl(String url) {
 		// TODO Auto-generated method stub
 		return trainerRepository.findByUrl(url);
+	}
+	
+	@Override
+	public void updateTrainerPhoto(Trainer trainer, Photo photo) {
+		trainer.setProfilePicture(photo);
+		trainerRepository.save(trainer);
 	}
 
 }

@@ -57,6 +57,16 @@ public class Post {
 //		this.added = new Timestamp(System.currentTimeMillis());
 		this.creator = creator;
 	}
+	
+	
+
+	public Post(String text, Trainer creator, List<Photo> postPhotos) {
+		super();
+		this.text = text;
+		this.creator = creator;
+		this.added = new Timestamp(System.currentTimeMillis());
+		this.postPhotos = postPhotos;
+	}
 
 	public Post(String text, Timestamp added, Trainer creator) {
 		super();

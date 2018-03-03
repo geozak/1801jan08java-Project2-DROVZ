@@ -61,26 +61,26 @@ public class PhotoController {
 
 	List<String> files = new ArrayList<String>();
 
-	@PostMapping("/postPhoto")
-	public ResponseEntity<String> handleFileUpload(
-			@RequestParam("file") MultipartFile file) {
-
-		Trainer trainer = sessionVariables.getTrainer();
-		if(trainer == null) {
-			System.out.println("FAIL to upload not logged in");
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FAIL to upload not logged in");
-		}
-		
-		
-		PhotoStorageResponse photoStorageResponse = storageService.storePhoto(file, trainer);
-		if(photoStorageResponse.isSuccess()) {
-			trainer.setProfilePicture(photoStorageResponse.getPhoto());
-			repo.save(trainer);
-			return ResponseEntity.ok(photoStorageResponse.getMessage());
-		}
-
-		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(photoStorageResponse.getMessage());
-	}
+//	@PostMapping("/postPhoto")
+//	public ResponseEntity<String> handleFileUpload(
+//			@RequestParam("file") MultipartFile file) {
+//
+//		Trainer trainer = sessionVariables.getTrainer();
+//		if(trainer == null) {
+//			System.out.println("FAIL to upload not logged in");
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("FAIL to upload not logged in");
+//		}
+//		
+//		
+//		PhotoStorageResponse photoStorageResponse = storageService.storePhoto(file, trainer);
+//		if(photoStorageResponse.isSuccess()) {
+//			trainer.setProfilePicture(photoStorageResponse.getPhoto());
+//			repo.save(trainer);
+//			return ResponseEntity.ok(photoStorageResponse.getMessage());
+//		}
+//
+//		return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(photoStorageResponse.getMessage());
+//	}
 
 	@GetMapping("/getallfiles")
 	public ResponseEntity<List<String>> getListFiles(Model model) {
