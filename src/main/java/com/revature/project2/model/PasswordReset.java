@@ -24,7 +24,7 @@ public class PasswordReset {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "reset_trainer_id", nullable = false, unique = true)
 	private Trainer trainer;
 

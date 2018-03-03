@@ -1,6 +1,5 @@
 package com.revature.project2.controler;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +58,8 @@ public class ForgotPasswordController {
 	@PostMapping("/change-password")
 	public @ResponseBody ResponseEntity<MessageJSON> changePassword(@RequestParam("email") String email,
 			@RequestParam("newPassword") String newPassword, @RequestParam("confirmPassword") String confirmPassword, @RequestParam("token") String token) {
-		System.out.println(email);
+		email = email.replace("\"", "");
+		token = token.replace("\"", "");
 		Trainer trainer = forgotPasswordService.findEmail(email);
 
 		if (trainer == null)

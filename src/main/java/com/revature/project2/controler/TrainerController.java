@@ -1,5 +1,6 @@
 package com.revature.project2.controler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import com.revature.project2.JSON.TrainerJSON;
 import com.revature.project2.model.Trainer;
 import com.revature.project2.service.TrainerService;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 @RestController("trainerController")
 @CrossOrigin(origins = "http://localhost:4200")
 //@CrossOrigin(origins = "*")
@@ -25,8 +28,11 @@ public class TrainerController {
 	TrainerService trainerService;
 	
 	@GetMapping("/getAllTrainers")
-	public @ResponseBody ResponseEntity<List<Trainer>> getAllTrainers(){
-		return new ResponseEntity<>(trainerService.getAllTrainers(), HttpStatus.OK);
+	public @ResponseBody ResponseEntity<List<TrainerJSON>> getAllTrainers(){
+		List<Trainer> trainers = trainerService.getAllTrainers();
+		List<TrainerJSON> output = new ArrayList<>();
+		trainers.forEach(trainer -> output.add(new TrainerJSON(trainer)));
+		return new ResponseEntity<>(output, HttpStatus.OK);
 	}
 	
 	
