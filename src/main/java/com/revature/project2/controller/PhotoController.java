@@ -1,7 +1,5 @@
 package com.revature.project2.controller;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
