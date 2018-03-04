@@ -182,6 +182,6 @@ public class Trainer {
 	public String toString() {
 		return "Trainer [id=" + id + ", url=" + url + ", firstName=" + firstName + ", lastName=" + lastName + ", salt="
 				+ salt + ", password=" + password + ", email=" + email + ", profilePicture="
-				+ profilePicture.toStringTwo() + "]";
+				+ (profilePicture == null ? "null" : profilePicture.toStringTwo()) + "]";
 	}
 }
