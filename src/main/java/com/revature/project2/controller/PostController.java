@@ -98,5 +98,19 @@ public class PostController {
 		}
 		
 	}
+	
+	@GetMapping("/getAllPosts")
+	public @ResponseBody ResponseEntity<List<PostJSON>> getAllPosts() {
+		Trainer trainer = sessionVariables.getTrainer();
+		if(trainer == null) {
+			System.out.println("FAIL to get posts not logged in");
+			return new ResponseEntity<List<PostJSON>>(HttpStatus.UNAUTHORIZED);
+		}
+		
+		List<Post> posts = postService.getPosts();
+		List<PostJSON> output = new ArrayList<>();
+		posts.forEach(post -> output.add(new PostJSON(post)));
+		return new ResponseEntity<>(output, HttpStatus.OK);
+	}
 
 }

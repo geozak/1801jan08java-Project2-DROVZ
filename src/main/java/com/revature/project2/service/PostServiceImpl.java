@@ -30,7 +30,7 @@ public class PostServiceImpl implements PostService{
 	@Override
 	public List<Post> getPosts() {
 		// TODO Auto-generated method stub
-		List<Post> lPost =(List<Post>) postRepository.findAll();
+		List<Post> lPost =(List<Post>) postRepository.findAllByOrderByAddedDesc();
 		return lPost;
 	}
 	
