@@ -28,4 +28,11 @@ public class TrainerServiceImpl implements TrainerService{
 		return trainerRepository.findByUrl(url);
 	}
 
+
+	@Override
+	public Trainer getTrainerById(int id) {
+		// TODO Auto-generated method stub
+		return trainerRepository.findById(id);
+	}
+
 }
