@@ -13,6 +13,7 @@ public interface TrainerRepository extends CrudRepository<Trainer, Integer> {
 	public List<Trainer> findAll();
 	public Trainer findByUrl(String url);
 	public Trainer findByEmail(String email);
+	public Trainer findById(int id);
 	public boolean existsByEmail(String email);
 	public boolean existsByUrl(String url);
 	

@@ -10,8 +10,10 @@ import com.revature.project2.model.Trainer;
 public interface PostRepository extends CrudRepository<Post, Integer> {
 	
 //	public List<Post> findAll();
+	public List<Post> findAllByOrderByAddedDesc();
 	public List<Post> findByCreator(Trainer trainer);
 	public List<Post> findByCreatorId(Integer id);
+	public List<Post> findByCreatorIdOrderByAddedDesc(Integer id);
 	public List<Post> findByCreatorUrl(String url);
 	
 }

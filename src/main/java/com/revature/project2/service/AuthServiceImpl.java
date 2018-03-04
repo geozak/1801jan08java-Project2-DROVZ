@@ -24,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
 	public Trainer login(String email, String password) {
 		System.out.println("attempting to login");
 		System.out.println("email: " + email);
-		System.out.println("password: " + password);
+		//System.out.println("password: " + password);
 		
 		Trainer trainer = trainerRepository.findByEmail(email);
 		System.out.println("Found: " + trainer);

@@ -54,7 +54,7 @@ public class Post {
 	public Post(String text, Trainer creator) {
 		super();
 		this.text = text;
-//		this.added = new Timestamp(System.currentTimeMillis());
+		//this.added = new Timestamp(System.currentTimeMillis());
 		this.creator = creator;
 	}
 
