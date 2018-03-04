@@ -57,8 +57,8 @@ public class ForgotPasswordController {
 		return new ResponseEntity<MessageJSON>(new MessageJSON("success"), HttpStatus.OK);
 	}
 
-	@PostMapping("/enter-password")
-	public @ResponseBody ResponseEntity<MessageJSON> changePassword(@RequestParam("email") String email,
+	@PostMapping("/reset-password")
+	public @ResponseBody ResponseEntity<MessageJSON> resetPassword(@RequestParam("email") String email,
 			@RequestParam("newPassword") String newPassword, @RequestParam("confirmPassword") String confirmPassword, @RequestParam("token") String token) {
 		Trainer trainer = forgotPasswordService.findEmail(email);
 
