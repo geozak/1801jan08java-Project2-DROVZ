@@ -7,7 +7,7 @@ import com.revature.project2.model.Post;
 public interface PostService {
 	
 	public boolean savePost(Post p);
-	
 	public List<Post> getPosts();
+	public List<Post> getPostsByID(int id);
 
 }

@@ -33,5 +33,12 @@ public class PostServiceImpl implements PostService{
 		List<Post> lPost =(List<Post>) postRepository.findAll();
 		return lPost;
 	}
+	
+	@Override
+	public List<Post> getPostsByID(int id) {
+		// TODO Auto-generated method stub
+		List<Post> lPost =(List<Post>) postRepository.findByCreatorId(id);
+		return lPost;
+	}
 
 }

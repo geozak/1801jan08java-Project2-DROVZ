@@ -1,4 +1,4 @@
-package com.revature.project2.controler;
+package com.revature.project2.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +58,17 @@ public class PostController {
 		return new ResponseEntity<>(output, HttpStatus.OK);
 		
 		//return new ResponseEntity<MessageJSON>(new MessageJSON("Success"), HttpStatus.OK);
+		
+	}
+	
+	@PostMapping("/getPostByUrl")
+	public @ResponseBody ResponseEntity<List<PostJSON>> getPostByUrl(@RequestParam("url") String url){
+		System.out.println("URL: "+ url);
+		Trainer t=trainerService.getTrainerByUrl(url);
+		List<Post> lPost=postService.getPostsByID(t.getId());
+		List<PostJSON> output = new ArrayList<>();
+		lPost.forEach(post -> output.add(new PostJSON(post)));
+		return new ResponseEntity<>(output, HttpStatus.OK);
 		
 	}
 
