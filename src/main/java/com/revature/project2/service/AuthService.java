@@ -5,6 +5,7 @@ import com.revature.project2.model.Trainer;
 public interface AuthService {
 
 	public Trainer login(String email, String password);
+	
 	public static class RegisterReturn {
 		public static enum Status { SUCCESS, INPUTSINVALID, EMAILEXISTS, URLEXISTS, OTHERFAILURE }
 		public Status status;
