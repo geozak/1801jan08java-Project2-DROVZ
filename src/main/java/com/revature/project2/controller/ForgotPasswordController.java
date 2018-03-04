@@ -1,4 +1,4 @@
-package com.revature.project2.controler;
+package com.revature.project2.controller;
 
 import java.util.UUID;
 
@@ -56,8 +56,11 @@ public class ForgotPasswordController {
 	}
 
 	@PostMapping("/change-password")
-	public @ResponseBody ResponseEntity<MessageJSON> changePassword(@RequestParam("email") String email,
-			@RequestParam("newPassword") String newPassword, @RequestParam("confirmPassword") String confirmPassword, @RequestParam("token") String token) {
+	public @ResponseBody ResponseEntity<MessageJSON> changePassword(
+			@RequestParam("email") String email,
+			@RequestParam("newPassword") String newPassword,
+			@RequestParam("confirmPassword") String confirmPassword,
+			@RequestParam("token") String token) {
 		email = email.replace("\"", "");
 		token = token.replace("\"", "");
 		Trainer trainer = forgotPasswordService.findEmail(email);
