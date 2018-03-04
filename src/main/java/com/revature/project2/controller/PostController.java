@@ -20,6 +20,7 @@ import com.revature.project2.model.Post;
 import com.revature.project2.model.Trainer;
 import com.revature.project2.service.PostService;
 import com.revature.project2.service.TrainerService;
+import com.revature.project2.session.SessionVariables;
 
 @RestController("postController")
 @CrossOrigin(origins = "*")
@@ -31,28 +32,43 @@ public class PostController {
 	@Autowired
 	private TrainerService trainerService;
 	
+	@Autowired
+	SessionVariables sessionVariables;
+	
 	@PostMapping("/createPost")
 	public @ResponseBody ResponseEntity<MessageJSON> createPost(
-			@RequestParam("author") String author, 
+//			@RequestParam("author") String author, 
 			@RequestParam("post") String post) {
 		
-		System.out.println("Post from user id: " + author);
-		System.out.println("Post: " + post);
-		Trainer t=trainerService.getTrainerById(Integer.parseInt(author));
-		Post newP = new Post(post,  t);
-		if(postService.savePost(newP)==true) {
-			System.out.println("Success");
-		}else {
-			System.out.println("Failure");
+		Trainer trainer = sessionVariables.getTrainer();
+		if(trainer == null) {
+			System.out.println("FAIL to create post not logged in");
+			return new ResponseEntity<MessageJSON>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		return new ResponseEntity<MessageJSON>(new MessageJSON("Success"), HttpStatus.OK);
+//		System.out.println("Post from user id: " + author);
+		System.out.println("Post: " + post);
+//		Trainer t=trainerService.getTrainerById(Integer.parseInt(author));
+		Post newP = new Post(post,  trainer);
+		if(postService.savePost(newP)==true) {
+			System.out.println("Success");
+			return new ResponseEntity<MessageJSON>(new MessageJSON("Success"), HttpStatus.OK);
+		}else {
+			System.out.println("Failure");
+			return new ResponseEntity<MessageJSON>(new MessageJSON("Failure"), HttpStatus.OK);
+		}
 	}
 	
-	@GetMapping("getPosts")
+	@GetMapping("/getPosts")
 	public @ResponseBody ResponseEntity<List<PostJSON>> getPosts(){
 		
-		List<Post> lPost=postService.getPosts();
+		Trainer trainer = sessionVariables.getTrainer();
+		if(trainer == null) {
+			System.out.println("FAIL to get posts not logged in");
+			return new ResponseEntity<List<PostJSON>>(HttpStatus.UNAUTHORIZED);
+		}
+		
+		List<Post> lPost=postService.getPostsByID(trainer.getId());
 		List<PostJSON> output = new ArrayList<>();
 		lPost.forEach(post -> output.add(new PostJSON(post)));
 		return new ResponseEntity<>(output, HttpStatus.OK);

@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService{
 	@Override
 	public List<Post> getPostsByID(int id) {
 		// TODO Auto-generated method stub
-		List<Post> lPost =(List<Post>) postRepository.findByCreatorId(id);
+		List<Post> lPost =(List<Post>) postRepository.findByCreatorIdOrderByAddedDesc(id);
 		return lPost;
 	}
 
