@@ -1,4 +1,4 @@
-package com.revature;
+package com.revature.project2;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FreshSpringBootWarApplicationTests {
+public class Project2DROVZApplicationTests {
 
 	@Test
 	public void contextLoads() {
