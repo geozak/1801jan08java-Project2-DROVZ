@@ -1,4 +1,4 @@
-package com.revature.project2.controler;
+package com.revature.project2.controller;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 
