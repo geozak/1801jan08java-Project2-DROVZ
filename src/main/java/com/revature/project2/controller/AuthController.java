@@ -32,6 +32,75 @@ public class AuthController {
 	public @ResponseBody ResponseEntity<String> rootGET() {
 		return new ResponseEntity<String>("Working", HttpStatus.OK);
 	}
+	
+	@PostMapping("/updatePassword")
+	//firstName: string, lastName: string, email: string, password: string
+	public @ResponseBody ResponseEntity<MessageJSON> updatePassword(
+			@RequestParam("oldPassword") String oldPassword,
+			@RequestParam("newPassword") String newPassword,
+			@RequestParam("confirmPassword") String confirmPassword) {
+		
+		System.out.println("inside change password");
+		
+		Trainer trainer = sessionVariables.getTrainer();
+		
+		if (trainer == null) {
+			System.out.println("FAIL to upload not logged in");
+			return new ResponseEntity<MessageJSON>(HttpStatus.UNAUTHORIZED);
+		}
+		
+		String returnStatus = authService.updatePassword(trainer, oldPassword, newPassword, confirmPassword);
+		
+		System.out.println("Status: " + returnStatus);
+		return new ResponseEntity<MessageJSON>(new MessageJSON(returnStatus), HttpStatus.OK);
+	}
+	
+	@PostMapping("/update")
+	//firstName: string, lastName: string, email: string, password: string
+	public @ResponseBody ResponseEntity<MessageJSON> update(
+			@RequestParam("firstName") String firstName, 
+			@RequestParam("lastName") String lastName,
+			@RequestParam("email") String email, 
+			@RequestParam("url") String url) {
+		
+		System.out.println("inside update");
+		
+		Trainer trainer = sessionVariables.getTrainer();
+		if(trainer == null) {
+			System.out.println("FAIL to upload not logged in");
+			return new ResponseEntity<MessageJSON>(HttpStatus.UNAUTHORIZED);
+		}
+		
+		System.out.println("updating user: " + firstName + " " + lastName);
+		System.out.println("email: " + email);
+		System.out.println("url: " + url);
+		
+		AuthService.RegisterReturn registerReturn = authService.edit(trainer, firstName, lastName, email, url);
+
+		String message;
+		// SUCCESS, INPUTSINVALID, EMAILEXISTS, URLEXISTS, OTHERFAILURE
+		switch (registerReturn.status) {
+		case SUCCESS:
+			message = "success";
+			break;
+		case INPUTSINVALID:
+			message = "inputs";
+			break;
+		case URLEXISTS:
+			message = "url";
+			break;
+		case EMAILEXISTS:
+			message = "email";
+			break;
+		case OTHERFAILURE:
+		default:
+			message = "other";
+			break;
+		}
+		
+		System.out.println("Status: " + message);
+		return new ResponseEntity<MessageJSON>(new MessageJSON(message), HttpStatus.OK);
+	}
 
 	@PostMapping("/register")
 	//firstName: string, lastName: string, email: string, password: string

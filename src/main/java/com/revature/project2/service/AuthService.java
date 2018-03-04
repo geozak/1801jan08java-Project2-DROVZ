@@ -16,5 +16,7 @@ public interface AuthService {
 		}
 	}
 	public RegisterReturn register(Trainer trainer);
+	public String updatePassword(Trainer trainer, String oldPassword, String newPassword, String confirmPassword);
+	public RegisterReturn edit(Trainer trainer, String firstName, String lastName, String email, String url);
 	
 }
