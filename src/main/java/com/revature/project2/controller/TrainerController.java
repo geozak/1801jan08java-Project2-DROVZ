@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.project2.JSON.PostJSON;
 import com.revature.project2.JSON.TrainerJSON;
 import com.revature.project2.model.Trainer;
 import com.revature.project2.service.TrainerService;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
+import com.revature.project2.session.SessionVariables;
 
 @RestController("trainerController")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -27,8 +27,16 @@ public class TrainerController {
 	@Autowired
 	TrainerService trainerService;
 	
+	@Autowired
+	SessionVariables sessionVariables;
+	
 	@GetMapping("/getAllTrainers")
 	public @ResponseBody ResponseEntity<List<TrainerJSON>> getAllTrainers(){
+		
+		if(sessionVariables.getTrainer() == null) {
+			System.out.println("FAIL to get trainers not logged in");
+			return new ResponseEntity<List<TrainerJSON>>(HttpStatus.UNAUTHORIZED);
+		}
 		List<Trainer> trainers = trainerService.getAllTrainers();
 		List<TrainerJSON> output = new ArrayList<>();
 		trainers.forEach(trainer -> output.add(new TrainerJSON(trainer)));
@@ -39,6 +47,10 @@ public class TrainerController {
 	@PostMapping("/getTrainerByUrl")
 	public @ResponseBody ResponseEntity<TrainerJSON> getTrainerByUrl(@RequestParam("url") String url){
 		System.out.println("URL: "+ url);
+		if(sessionVariables.getTrainer() == null) {
+			System.out.println("FAIL to get trainer not logged in");
+			return new ResponseEntity<TrainerJSON>(HttpStatus.UNAUTHORIZED);
+		}
 		Trainer t=trainerService.getTrainerByUrl(url);
 		return new ResponseEntity<TrainerJSON>(new TrainerJSON(t, true), HttpStatus.OK);
 		
