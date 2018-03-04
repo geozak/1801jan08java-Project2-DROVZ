@@ -1,4 +1,4 @@
-package com.revature.project2.controler;
+package com.revature.project2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -90,4 +90,9 @@ public class AuthController {
 	}
 	
 	
+	@PostMapping("/logout")
+	public @ResponseBody ResponseEntity<MessageJSON> logout() {
+		sessionVariables.setTrainer(null);
+		return new ResponseEntity<MessageJSON>(new MessageJSON("Logged out"), HttpStatus.OK);
+	}
 }
