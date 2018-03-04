@@ -28,6 +28,8 @@ public class ForgotPasswordController {
 
 		if (trainer == null)
 			return new ResponseEntity<MessageJSON>(new MessageJSON("email"), HttpStatus.OK);
+		
+		forgotPasswordService.deletePreviousTokens(trainer);
 
 		String token = UUID.randomUUID().toString();
 
@@ -55,15 +57,21 @@ public class ForgotPasswordController {
 		return new ResponseEntity<MessageJSON>(new MessageJSON("success"), HttpStatus.OK);
 	}
 
-	@PostMapping("/change-password")
+	@PostMapping("/enter-password")
 	public @ResponseBody ResponseEntity<MessageJSON> changePassword(@RequestParam("email") String email,
 			@RequestParam("newPassword") String newPassword, @RequestParam("confirmPassword") String confirmPassword, @RequestParam("token") String token) {
-		email = email.replace("\"", "");
-		token = token.replace("\"", "");
 		Trainer trainer = forgotPasswordService.findEmail(email);
 
 		if (trainer == null)
 			return new ResponseEntity<MessageJSON>(new MessageJSON("email"), HttpStatus.OK);
+		
+		PasswordReset pr = forgotPasswordService.findToken(token);
+
+		if (pr == null)
+			return new ResponseEntity<MessageJSON>(new MessageJSON("token"), HttpStatus.OK);
+		
+		if (pr.getTrainer().getId() != trainer.getId())
+			return new ResponseEntity<MessageJSON>(new MessageJSON("id"), HttpStatus.OK);
 		
 		if (newPassword.equals(confirmPassword) == false)
 			return new ResponseEntity<MessageJSON>(new MessageJSON("match"), HttpStatus.OK);
