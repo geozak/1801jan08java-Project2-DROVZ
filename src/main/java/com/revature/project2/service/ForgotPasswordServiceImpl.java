@@ -1,14 +1,6 @@
 package com.revature.project2.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.revature.project2.model.PasswordReset;
-import com.revature.project2.model.Trainer;
-import com.revature.project2.repository.PasswordResetRepository;
-import com.revature.project2.repository.TrainerRepository;
-import com.revature.project2.util.PasswordHashing;
-
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -18,7 +10,15 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.revature.project2.model.PasswordReset;
+import com.revature.project2.model.Trainer;
+import com.revature.project2.repository.PasswordResetRepository;
+import com.revature.project2.repository.TrainerRepository;
+import com.revature.project2.util.PasswordHashing;
 
 @Service("forgotPasswordService")
 public class ForgotPasswordServiceImpl implements ForgotPasswordService {
@@ -45,6 +45,17 @@ public class ForgotPasswordServiceImpl implements ForgotPasswordService {
 	public PasswordReset findTokenByTrainerId(int id) {
 		PasswordReset pr = passwordResetRepository.findByTrainerId(id);
 		return pr;
+	}
+	
+	@Override
+	public void deletePreviousTokens(Trainer trainer) {
+		List<PasswordReset> prs = (List<PasswordReset>)passwordResetRepository.findAll();
+		
+		for (PasswordReset passwordReset : prs) {
+			if (passwordReset.getTrainer().getId() == trainer.getId()) {
+				passwordResetRepository.delete(passwordReset.getId());
+			}
+		}
 	}
 	
 	@Override
