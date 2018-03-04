@@ -78,13 +78,24 @@ public class PostController {
 	}
 	
 	@PostMapping("/getPostByUrl")
-	public @ResponseBody ResponseEntity<List<PostJSON>> getPostByUrl(@RequestParam("url") String url){
+	public @ResponseBody ResponseEntity<List<PostJSON>> getPostByUrl(
+			@RequestParam("url") String url){
+		if(sessionVariables.getTrainer() == null) {
+			System.out.println("FAIL to get posts not logged in");
+			return new ResponseEntity<List<PostJSON>>(HttpStatus.UNAUTHORIZED);
+		}
+		
 		System.out.println("URL: "+ url);
 		Trainer t=trainerService.getTrainerByUrl(url);
+		if(t==null) {
+			List<PostJSON> output = new ArrayList<>();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} else {
 		List<Post> lPost=postService.getPostsByID(t.getId());
 		List<PostJSON> output = new ArrayList<>();
 		lPost.forEach(post -> output.add(new PostJSON(post)));
 		return new ResponseEntity<>(output, HttpStatus.OK);
+		}
 		
 	}
 
