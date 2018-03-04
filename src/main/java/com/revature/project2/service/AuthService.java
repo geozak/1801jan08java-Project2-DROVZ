@@ -15,6 +15,7 @@ public interface AuthService {
 		}
 	}
 	public RegisterReturn register(Trainer trainer);
+	public RegisterReturn edit(Trainer trainer, String firstName, String lastName, String email, String url);
 	public boolean requestPasswordReset(String email);
 	public boolean resetPassword(String email, String token, String Password);
 	

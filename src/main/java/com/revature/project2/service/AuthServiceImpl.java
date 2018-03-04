@@ -8,6 +8,7 @@ import com.revature.project2.model.Trainer;
 import com.revature.project2.model.validator.TrainerValidator;
 import com.revature.project2.repository.PasswordResetRepository;
 import com.revature.project2.repository.TrainerRepository;
+import com.revature.project2.service.AuthService.RegisterReturn;
 import com.revature.project2.service.AuthService.RegisterReturn.Status;
 import com.revature.project2.util.PasswordHashing;
 
@@ -38,6 +39,39 @@ public class AuthServiceImpl implements AuthService {
 			return trainer;
 		}
 		return null;
+	}
+	
+	public RegisterReturn edit(Trainer trainer, String firstName, String lastName, String email, String url) {
+		if (!trainer.getFirstName().equals(firstName)) {
+			trainer.setFirstName(firstName);
+		}
+		
+		if (!trainer.getLastName().equals(lastName)) {
+			trainer.setLastName(lastName);
+		}
+		
+		if (!trainer.getEmail().equals(email)) {
+			trainer.setEmail(email);
+			System.out.println(email);
+			System.out.println(trainer.getEmail());
+			
+			if (trainerRepository.existsByEmail(trainer.getEmail())) {
+				return new RegisterReturn(Status.EMAILEXISTS, null);
+			}
+		}
+		
+		if (!trainer.getUrl().equals(url)) {
+			trainer.setUrl(url);
+			
+			if (trainer.getUrl() != null && TrainerValidator.isUrlValid(trainer)) {
+				if (trainerRepository.existsByUrl(trainer.getUrl())) {
+					return new RegisterReturn(Status.URLEXISTS, null);
+				}
+			}
+		}
+		
+		Trainer t = trainerRepository.save(trainer);
+		return new RegisterReturn(t != null ? Status.SUCCESS : Status.OTHERFAILURE, t);
 	}
 
 	@Override
