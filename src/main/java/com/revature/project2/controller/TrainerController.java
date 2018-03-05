@@ -20,8 +20,8 @@ import com.revature.project2.service.TrainerService;
 import ch.qos.logback.core.net.SyslogOutputStream;
 
 @RestController("trainerController")
-@CrossOrigin(origins = "http://localhost:4200")
-//@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class TrainerController {
 	
 	@Autowired
