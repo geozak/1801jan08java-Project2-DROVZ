@@ -6,13 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.revature.project2.model.Post;
+import com.revature.project2.model.Trainer;
 import com.revature.project2.repository.PostRepository;
+import com.revature.project2.repository.TrainerRepository;
 
 @Service("postService")
 public class PostServiceImpl implements PostService{
 
 	@Autowired
 	private PostRepository postRepository;
+	
+	@Autowired
+	private TrainerRepository trainerRepository;
 	
 	@Override
 	public boolean savePost(Post p) {
@@ -42,10 +47,28 @@ public class PostServiceImpl implements PostService{
 	}
 	
 	@Override
-	public Post getPostByID(int id) {
-		// TODO Auto-generated method stub
-		Post lPost =(Post) postRepository.findOne(id);
-		return lPost;
+	public Post getPostById(int id) {
+		return postRepository.findOne(id);
 	}
 
+	@Override
+	public boolean likePost(Post post, Trainer trainer) {
+		List<Post> likedPosts = trainer.getLikedPosts();
+		likedPosts.add(post);
+		Trainer obj = trainerRepository.save(trainer);
+		if (obj == null)
+			return false;
+		return true;
+	}
+
+	@Override
+	public boolean unlikePost(Post post, Trainer trainer) {
+		List<Post> likedPosts = trainer.getLikedPosts();
+		boolean removed = likedPosts.remove(post);
+		if (removed == false)
+			System.out.println("didn't remove post");
+		trainer.setLikedPosts(likedPosts);
+		trainerRepository.save(trainer);
+		return true;
+	}
 }
