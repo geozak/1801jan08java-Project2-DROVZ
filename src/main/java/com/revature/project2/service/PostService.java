@@ -9,5 +9,6 @@ public interface PostService {
 	public boolean savePost(Post p);
 	public List<Post> getPosts();
 	public List<Post> getPostsByID(int id);
+	Post getPostByID(int id);
 
 }

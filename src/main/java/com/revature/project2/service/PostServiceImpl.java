@@ -40,5 +40,12 @@ public class PostServiceImpl implements PostService{
 		List<Post> lPost =(List<Post>) postRepository.findByCreatorIdOrderByAddedDesc(id);
 		return lPost;
 	}
+	
+	@Override
+	public Post getPostByID(int id) {
+		// TODO Auto-generated method stub
+		Post lPost =(Post) postRepository.findOne(id);
+		return lPost;
+	}
 
 }
