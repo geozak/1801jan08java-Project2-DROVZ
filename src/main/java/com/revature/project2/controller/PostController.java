@@ -164,18 +164,23 @@ public class PostController {
 			System.out.println("FAIL to upload not logged in");
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageJSON("FAIL to upload not logged in"));
 		}
+		
+		Post post = postService.getPostById(id);
+		if(post.getCreator() != sessionVariables.getTrainer())
+			return ResponseEntity.ok(new MessageJSON("You don't have control of this post"));
 
 		PhotoStorageResponse photoStorageResponse = storageService.storePhoto(file, trainer);
 		System.out.println(photoStorageResponse.isSuccess());
 		if (photoStorageResponse.isSuccess()) {
-			List<Photo> photos = new ArrayList<Photo>();
+//			List<Photo> photos = new ArrayList<Photo>();
+			List<Photo> photos = post.getPostPhotos();
+			if (photos == null) {
+				photos = new ArrayList<Photo>();
+				post.setPostPhotos(photos);
+			}
 			photos.add(photoStorageResponse.getPhoto());
-			Post post = postService.getPostByID(id);
 			
-			if(post.getCreator() != sessionVariables.getTrainer())
-				return ResponseEntity.ok(new MessageJSON("You don't have control of this post"));
-			
-			post.setPostPhotos(photos);
+//			post.setPostPhotos(photos);
 			
 			postService.savePost(post);
 			return ResponseEntity.ok(new MessageJSON(photoStorageResponse.getMessage()));
