@@ -113,4 +113,37 @@ public class PostController {
 		return new ResponseEntity<>(output, HttpStatus.OK);
 	}
 
+	@PostMapping("/like")
+	public @ResponseBody ResponseEntity<MessageJSON> likePost(@RequestParam("postID") int postId) {
+		Trainer trainer = sessionVariables.getTrainer();
+		if (trainer == null)
+			return new ResponseEntity<MessageJSON>(new MessageJSON("login"), HttpStatus.UNAUTHORIZED);
+		
+		Post post = postService.getPostById(postId);
+		if (post == null)
+			return new ResponseEntity<MessageJSON>(new MessageJSON("post"), HttpStatus.OK);
+		
+		boolean completed = postService.likePost(post, trainer);
+		if (completed == false)
+			return new ResponseEntity<MessageJSON>(new MessageJSON("failure"), HttpStatus.OK);
+		
+		return new ResponseEntity<MessageJSON>(new MessageJSON("success"), HttpStatus.OK);
+	}
+	
+	@PostMapping("/unlike")
+	public @ResponseBody ResponseEntity<MessageJSON> unlikePost(@RequestParam("postID") int postId) {
+		Trainer trainer = sessionVariables.getTrainer();
+		if (trainer == null)
+			return new ResponseEntity<MessageJSON>(new MessageJSON("login"), HttpStatus.UNAUTHORIZED);
+		
+		Post post = postService.getPostById(postId);
+		if (post == null)
+			return new ResponseEntity<MessageJSON>(new MessageJSON("post"), HttpStatus.OK);
+		
+		boolean completed = postService.unlikePost(post, trainer);
+		if (completed == false)
+			return new ResponseEntity<MessageJSON>(new MessageJSON("failure"), HttpStatus.OK);
+		
+		return new ResponseEntity<MessageJSON>(new MessageJSON("success"), HttpStatus.OK);
+	}
 }
